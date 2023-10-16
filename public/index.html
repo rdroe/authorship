@@ -5,12 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weblog Authoring Platform</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./dist/style.css">    
 </head>
 
 <body>
     <div id="root"></div>
     <!-- Your bundled JavaScript will be attached here -->
-    <script src="./bundle.js"></script>
+    <script type="module">
+      import * as x from "./bundle.js";
+      console.log(x);
+    </script>
 </body>
 
 </html>

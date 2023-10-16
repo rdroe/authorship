@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Dexie from 'dexie';
 import indexedDB from 'fake-indexeddb';
-
+const { useState, useEffect } = React;
 // Set Dexie to use the fake indexedDB
 Dexie.dependencies.indexedDB = indexedDB;
 
@@ -38,6 +38,7 @@ const App: React.FC = () => {
 
     return (
         <div>
+            <div>Hello World!</div>
             <Editor
                 previewStyle="vertical"
                 initialEditType="markdown"
@@ -45,6 +46,7 @@ const App: React.FC = () => {
                 onChange={() => { }}
                 ref={(instance) => setEditorRef(instance)}
             />
+
             <button onClick={savePost}>Save</button>
 
             <hr />
