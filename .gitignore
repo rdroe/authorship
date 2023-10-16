@@ -1,0 +1,57 @@
+public/js
+public/js/commands
+public/pl/**/*
+public/pl
+public/pl/modules
+*.js.map
+node_modules/
+dist/
+**/.DS_Store
+\#*\#
+**/\#
+.\#*
+*~
+.env
+yarn-error.log
+.yarn
+
+
+# react boilerplate stuff below this line
+# Don't check auto-generated stuff into git
+coverage
+build
+node_modules
+stats.json
+.pnp
+.pnp.js
+
+# misc
+.DS_Store
+npm-debug.log*
+
+# yarn
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# yarn v3+ files
+.yarn
+
+
+# env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# boilerplate internals
+generated-cra-app
+.cra-template-rb
+template
+.eslintcache
+
