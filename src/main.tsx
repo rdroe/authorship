@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Dexie from 'dexie';
+import indexedDB from 'fake-indexeddb';
+
+// Set Dexie to use the fake indexedDB
+Dexie.dependencies.indexedDB = indexedDB;
 
 // Setting up the IndexedDB using Dexie
 const db = new Dexie('WeblogDB');
