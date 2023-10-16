@@ -1,8 +1,4 @@
-public/js
-public/js/commands
-public/pl/**/*
-public/pl
-public/pl/modules
+public/index.html
 *.js.map
 node_modules/
 dist/
