@@ -1,4 +1,8 @@
 public/index.html
+public/**/*.js
+public/*.js
+public/assets/*
+public/**/*.css
 *.js.map
 node_modules/
 dist/

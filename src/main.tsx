@@ -1,13 +1,13 @@
-import * as React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Dexie from 'dexie';
 import indexedDB from 'fake-indexeddb';
-const { useState, useEffect } = React;
+
 // Set Dexie to use the fake indexedDB
 Dexie.dependencies.indexedDB = indexedDB;
 
-// Setting up the IndexedDB using Dexie
 const db = new Dexie('WeblogDB');
 db.version(1).stores({
     posts: '++id, markdown'
@@ -15,30 +15,50 @@ db.version(1).stores({
 
 const App: React.FC = () => {
     const [editorRef, setEditorRef] = useState<any>(null);
-    const [posts, setPosts] = useState<string[]>([]);
+    const [posts, setPosts] = useState<Array<{ id: number, markdown: string }>>([]);
+    const [editingId, setEditingId] = useState<number | null>(null);
 
-    // Load all posts from IndexedDB on component mount
     useEffect(() => {
-        const fetchPosts = async () => {
-            const allPosts = await db.table('posts').toArray();
-            setPosts(allPosts.map(post => post.markdown));
-        }
         fetchPosts();
     }, []);
+
+    const fetchPosts = async () => {
+        const allPosts = await db.table('posts').toArray();
+        setPosts(allPosts);
+    };
 
     const savePost = async () => {
         if (!editorRef) return;
 
         const markdown = editorRef.getInstance().getMarkdown();
-        await db.table('posts').add({ markdown });
 
-        // Update posts list
-        setPosts([...posts, markdown]);
+        if (editingId) {
+            await db.table('posts').update(editingId, { markdown });
+            setEditingId(null);  // Reset editing mode
+        } else {
+            await db.table('posts').add({ markdown });
+        }
+
+        // Refresh the posts list
+        fetchPosts();
+    };
+
+    const loadPost = (post: { id: number, markdown: string }) => {
+        if (!editorRef) return;
+
+        editorRef.getInstance().setMarkdown(post.markdown);
+        setEditingId(post.id);  // Set the current editing post ID
+    };
+
+    const startNewPost = () => {
+        if (!editorRef) return;
+
+        editorRef.getInstance().setMarkdown('');
+        setEditingId(null);  // Reset editing mode
     };
 
     return (
         <div>
-            <div>Hello World!</div>
             <Editor
                 previewStyle="vertical"
                 initialEditType="markdown"
@@ -46,22 +66,27 @@ const App: React.FC = () => {
                 onChange={() => { }}
                 ref={(instance) => setEditorRef(instance)}
             />
-
-            <button onClick={savePost}>Save</button>
+            <button onClick={savePost}>
+                {editingId ? 'Update' : 'Save'}
+            </button>
+            <button onClick={startNewPost}>Create a new post</button> {/* New Button Here */}
 
             <hr />
 
             <div>
                 <h3>Saved Posts:</h3>
-                {posts.map((post, idx) => (
-                    <div key={idx}>
-                        <h4>Post #{idx + 1}</h4>
-                        <div>{post}</div>
+                {posts.map((post) => (
+                    <div key={post.id}>
+                        <h4>Post #{post.id}</h4>
+                        <div>{post.markdown}</div>
+                        <button onClick={() => loadPost(post)}>Load</button>
                     </div>
                 ))}
             </div>
         </div>
     );
+
+
 };
 
 export default App;
